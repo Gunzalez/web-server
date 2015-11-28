@@ -4,21 +4,22 @@ var app = express();
 var port = 3000;
 
 var mw = {
-	reqAuth: function (req, res, next) {
+	reqLog: function (req, res, next) {
 		var date = new Date().toString();
 		console.log('Resquest: ' + req.method + ' ' + req.originalUrl + ' On: ' + date);
 		next();
+	},
+	reqAuth: function (req, res, next) {
+		console.log('Hitting this page, that\'s all');
+		next();
 	}
 }
-// app.get('/', function (req, res) {
-// 	res.send('Hello Express!');
-// });
 
-// app.get('/about', function (req, res) {
-// 	res.send('About Us!');
-// });
+app.use(mw.reqLog);
 
-app.use(mw.reqAuth);
+app.get('/about', mw.reqAuth, function (req, res) {
+	res.send('About Us!');
+});
 
 app.use(express.static(__dirname + '/public'));
 

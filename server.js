@@ -2,22 +2,11 @@
 var express = require('express');
 var app = express();
 var port = 3000;
+var middleware = require('./middleware.js');
 
-var mw = {
-	reqLog: function (req, res, next) {
-		var date = new Date().toString();
-		console.log('Resquest: ' + req.method + ' ' + req.originalUrl + ' On: ' + date);
-		next();
-	},
-	reqAuth: function (req, res, next) {
-		console.log('Hitting this page, that\'s all');
-		next();
-	}
-}
+app.use(middleware.reqLog);
 
-app.use(mw.reqLog);
-
-app.get('/about', mw.reqAuth, function (req, res) {
+app.get('/about', middleware.reqAuth, function (req, res) {
 	res.send('About Us!');
 });
 
